@@ -29,7 +29,7 @@ require_relative 'delphix/version'
 # to only one instance that is globally available.
 #
 # @example
-#   To establish a session with the Delphix appliance and get a cookie for
+#   To establish a session with the Delphix appliance and get a cookies for
 #   your effort you issue the following sequence:
 #
 #   * Configure the Delphix client to use the specified version of the API, in
@@ -106,23 +106,23 @@ module Delphix
   end
 
   def self.session
-    Delphix.default_header('Cookie', cookie)
+    Delphix.default_header('Cookie', cookies)
     @session ||= login(@api_user, @api_passwd)
   end
 
   # Establish a session with the Delphix engine and return an identifier
-  # through browser cookie. This session will be reused in subsequent calls,
+  # through browser cookies. This session will be reused in subsequent calls,
   # the same session credentials and state are preserved without requiring a
   # re-authentication call. Sessions do not persisit between incovations.
   #
-  # @return [Hash] cookie
-  #   containing the new session cookie
+  # @return [Hash] cookies
+  #   containing the new session cookies
   #
   # @api public
-  def self.cookie
+  def self.cookies
     @resp ||= Delphix.post session_url,
       type: 'APISession', version: @api_version
-    @resp.cookie
+    @resp.cookies
   end
 
   # Authenticates the session so that API calls can be made. Only supports basic

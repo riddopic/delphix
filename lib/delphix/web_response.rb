@@ -42,22 +42,22 @@ module Delphix
     #   @return [#headers]
     attr_reader :headers
     # @!attribute [r] method
-    #   The current session cookie.
+    #   The current session cookies.
     #   @return [#raw_body]
-    attr_reader :cookie
+    attr_reader :cookies
 
     def initialize(response)
       @code = response.code
       @headers = response.headers
       @raw_body = response
       @body = @raw_body
-      @cookie = response.cookie
+      @cookies = response.cookies
 
       Delphix.last_response = {
         code: response.code,
         headers: response.headers,
         body: JSON.parse(response.body),
-        cookie: response.cookie,
+        cookies: response.cookies,
         description: response.description
       }.recursively_normalize_keys
 

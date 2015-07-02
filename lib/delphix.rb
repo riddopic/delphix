@@ -106,7 +106,7 @@ module Delphix
   end
 
   def self.session
-    Delphix.default_header('Cookie', cookies)
+    Delphix.default_header(:cookies, cookies)
     @session ||= login(@api_user, @api_passwd)
   end
 

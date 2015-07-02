@@ -27,7 +27,7 @@ module Delphix
   module Version
     MAJOR = 0
     MINOR = 2
-    PATCH = 5
+    PATCH = 6
 
     # Returns a version string by joining MAJOR, MINOR, and PATCH with '.'
     #

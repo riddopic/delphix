@@ -1,0 +1,16 @@
+# -*- coding: utf-8 -*-
+
+AllCops:
+  Include:
+    - Gemfile
+    - attributes/**/*
+    - recipes/**/*
+    - libraries/**/*
+    - providers/**/*
+    - resources/**/*
+  Exclude:
+    - test/**/*
+    - vendor/**/*
+
+inherit_from: test/support/rubocop/enabled.yml
+inherit_from: test/support/rubocop/disabled.yml

@@ -38,6 +38,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'hoodie'
   gem.add_dependency 'rest-client'
+  gem.add_dependency 'addressable'
 
   # Development gems
   gem.add_development_dependency 'rake',        '~> 10.4'

@@ -26,7 +26,7 @@ module Delphix
   # Contains information about this gem's version
   module Version
     MAJOR = 0
-    MINOR = 1
+    MINOR = 2
     PATCH = 0
 
     # Returns a version string by joining MAJOR, MINOR, and PATCH with '.'

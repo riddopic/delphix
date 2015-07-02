@@ -22,6 +22,7 @@ require 'json'
 module Delphix
   class WebResponse
     include Net::HTTPHeader
+    include Delphix::Utils
 
     # @!attribute [r] code
     #   The HTTP response code from Delphix engine.

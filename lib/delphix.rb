@@ -36,7 +36,7 @@ require_relative 'delphix/version'
 #     hash format as `{ major: 1, micro: 0, minor: 0 }`, for example:
 #       Delphix.api_version = {
 #         type: 'APIVersion',
-#         major: { major: 1, micro: 0, minor: 0 }
+#         version: { major: 1, micro: 0, minor: 0 }
 #       }
 #   * Specify the Delphix server to connect to.
 #       Delphix.server = 'delphix.example.com'
@@ -106,23 +106,23 @@ module Delphix
   end
 
   def self.session
-    Delphix.default_header(:cookies, cookies)
+    Delphix.default_header('Cookie', cookie)
     @session ||= login(@api_user, @api_passwd)
   end
 
   # Establish a session with the Delphix engine and return an identifier
-  # through browser cookies. This session will be reused in subsequent calls,
+  # through browser cookie. This session will be reused in subsequent calls,
   # the same session credentials and state are preserved without requiring a
   # re-authentication call. Sessions do not persisit between incovations.
   #
-  # @return [Hash] cookies
-  #   containing the new session cookies
+  # @return [Hash] cookie
+  #   containing the new session cookie
   #
   # @api public
-  def self.cookies
+  def self.cookie
     @resp ||= Delphix.post session_url,
       type: 'APISession', version: @api_version
-    @resp.cookies
+    @resp.cookie
   end
 
   # Authenticates the session so that API calls can be made. Only supports basic

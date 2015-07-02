@@ -46,7 +46,16 @@ class Hash
   # @return [Hash]
   #
   def recursively_normalize_keys
-    _recursively_transform_keys { |key| key.downcase.to_sym rescue key }
+    recursively_transform_keys { |key| key.downcase.to_sym rescue key }
+  end
+
+  # Returns a new hash, recursively converting all keys by the
+  # block operation.
+  #
+  # @return [Hash]
+  #
+  def recursively_transform_keys(&block)
+    _recursively_transform_keys_in_object(self, &block)
   end
 
   private #   P R O P R I E T À   P R I V A T A   divieto di accesso

@@ -149,37 +149,95 @@ module Delphix
       type: 'LoginRequest', username: user, password: passwd
   end
 
-  # @!method session
-  #   A helper method to return the URL for the resource by using the
-  #   resource_url shorthand.
-  #   @return [String] The API path to session.
-  #
-  # @!method login
-  #   A helper method to return the URL for the resource by using the
-  #   resource_url shorthand.
-  #   @return [String] The API path to login.
-  #
-  # @!method environment
-  #   A helper method to return the URL for the resource by using the
-  #   resource_url shorthand.
-  #   @return [String] The API path to environment.
-  #
   # @!method alert
   #   A helper method to return the URL for the resource by using the
   #   resource_url shorthand.
   #   @return [String] The API path to alert.
+  #
+  # @!method container
+  #   A helper method to return the URL for the resource by using the
+  #   resource_url shorthand.
+  #   @return [String] The API path to container.
   #
   # @!method database
   #   A helper method to return the URL for the resource by using the
   #   resource_url shorthand.
   #   @return [String] The API path to database.
   #
+  # @!method environment
+  #   A helper method to return the URL for the resource by using the
+  #   resource_url shorthand.
+  #   @return [String] The API path to environment.
+  #
+  # @!method group
+  #   A helper method to return the URL for the resource by using the
+  #   resource_url shorthand.
+  #   @return [String] The API path to group.
+  #
+  # @!method host
+  #   A helper method to return the URL for the resource by using the
+  #   resource_url shorthand.
+  #   @return [String] The API path to host.
+  #
+  # @!method job
+  #   A helper method to return the URL for the resource by using the
+  #   resource_url shorthand.
+  #   @return [String] The API path to job.
+  #
+  # @!method login
+  #   A helper method to return the URL for the resource by using the
+  #   resource_url shorthand.
+  #   @return [String] The API path to login.
+  #
+  # @!method policy
+  #   A helper method to return the URL for the resource by using the
+  #   resource_url shorthand.
+  #   @return [String] The API path to policy.
+  #
+  # @!method repository
+  #   A helper method to return the URL for the resource by using the
+  #   resource_url shorthand.
+  #   @return [String] The API path to repository.
+  #
+  # @!method session
+  #   A helper method to return the URL for the resource by using the
+  #   resource_url shorthand.
+  #   @return [String] The API path to session.
+  #
+  # @!method snapshot
+  #   A helper method to return the URL for the resource by using the
+  #   resource_url shorthand.
+  #   @return [String] The API path to snapshot.
+  #
   # @!method source
   #   A helper method to return the URL for the resource by using the
   #   resource_url shorthand.
   #   @return [String] The API path to source.
   #
-  [:session, :login, :environment, :alert, :database, :source].each do |name|
+  # @!method sourceconfig
+  #   A helper method to return the URL for the resource by using the
+  #   resource_url shorthand.
+  #   @return [String] The API path to sourceconfig.
+  #
+  # @!method template
+  #   A helper method to return the URL for the resource by using the
+  #   resource_url shorthand.
+  #   @return [String] The API path to template.
+  #
+  # @!method timeflow
+  #   A helper method to return the URL for the resource by using the
+  #   resource_url shorthand.
+  #   @return [String] The API path to timeflow.
+  #
+  # @!method user
+  #   A helper method to return the URL for the resource by using the
+  #   resource_url shorthand.
+  #   @return [String] The API path to user.
+  #
+  [ :alert, :container, :database, :environment, :group, :host, :job,
+    :login, :policy, :repository, :session, :snapshot, :source,
+    :sourceconfig, :template, :timeflow :user
+  ].each do |name|
     define_singleton_method(name.to_s + '_url') do
       api_url('/resources/json/delphix/' + name.to_s)
     end

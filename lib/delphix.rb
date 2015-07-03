@@ -236,7 +236,7 @@ module Delphix
   #
   [ :alert, :container, :database, :environment, :group, :host, :job,
     :login, :policy, :repository, :session, :snapshot, :source,
-    :sourceconfig, :template, :timeflow :user
+    :sourceconfig, :template, :timeflow, :user
   ].each do |name|
     define_singleton_method(name.to_s + '_url') do
       api_url('/resources/json/delphix/' + name.to_s)

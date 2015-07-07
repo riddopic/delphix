@@ -40,6 +40,24 @@ module Delphix
 end
 
 class Hash
+  # A hash is blank if it's empty:
+  #
+  # @example
+  #   {}.blank?                # => true
+  #   { key: 'value' }.blank?  # => false
+  #
+  # @api public
+  alias_method :blank?, :empty?
+
+  # Returns a new hash with all keys downcased and converted
+  # to symbols.
+  #
+  # @return [Hash]
+  #
+  def normalize_keys
+    transform_keys { |key| key.downcase.to_sym rescue key }
+  end
+
   # Returns a new Hash, recursively downcasing and converting all
   # keys to symbols.
   #
@@ -47,6 +65,25 @@ class Hash
   #
   def recursively_normalize_keys
     recursively_transform_keys { |key| key.downcase.to_sym rescue key }
+  end
+
+  # Returns a new hash with all keys converted using the block operation.
+  #
+  # @example
+  #   hash = { name: 'Tigie', age: '15' }
+  #   hash.transform_keys{ |key| key.to_s.upcase }
+  #     # => { "AGE" => "15", "NAME" => "Tigie" }
+  #
+  # @return [Hash]
+  #
+  # @api public
+  def transform_keys
+    enum_for(:transform_keys) unless block_given?
+    result = self.class.new
+    each_key do |key|
+      result[yield(key)] = self[key]
+    end
+    result
   end
 
   # Returns a new hash, recursively converting all keys by the
@@ -61,7 +98,6 @@ class Hash
   private #   P R O P R I E T À   P R I V A T A   divieto di accesso
 
   # support methods for recursively transforming nested hashes and arrays
-  #
   def _recursively_transform_keys_in_object(object, &block)
     case object
     when Hash

@@ -18,6 +18,7 @@
 #
 
 require 'json'
+require_relative 'utils'
 
 module Delphix
   class WebResponse
@@ -65,26 +66,6 @@ module Delphix
         @body = JSON.parse(@raw_body)
       rescue Exception
       end
-    end
-
-    def ==(other)
-      @headers == other
-    end
-
-    def inspect
-      @headers.inspect
-    end
-
-    def method_missing(name, *args, &block)
-      if @headers.respond_to?(name)
-        @headers.send(name, *args, &block)
-      else
-        super
-      end
-    end
-
-    def respond_to?(method)
-      super || @headers.respond_to?(method)
     end
   end
 end

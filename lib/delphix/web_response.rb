@@ -18,13 +18,9 @@
 #
 
 require 'json'
-require_relative 'utils'
 
 module Delphix
   class WebResponse
-    include Net::HTTPHeader
-    include Delphix::Utils
-
     # @!attribute [r] code
     #   The HTTP response code from Delphix engine.
     #   @return [#code]
@@ -51,21 +47,16 @@ module Delphix
       @code = response.code
       @headers = response.headers
       @raw_body = response
-      @body = @raw_body
+      @body = Hashie::Mash.new(JSON.parse(@raw_body))
       @cookies = response.cookies
 
       Delphix.last_response = {
         code: response.code,
         headers: response.headers,
-        body: JSON.parse(response.body),
+        body: response.body,
         cookies: response.cookies,
         description: response.description
-      }.recursively_normalize_keys
-
-      begin
-        @body = JSON.parse(@raw_body)
-      rescue Exception
-      end
+      }
     end
   end
 end

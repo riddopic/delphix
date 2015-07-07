@@ -18,6 +18,7 @@
 #
 
 require 'rest-client'
+require 'hashie'
 require_relative 'delphix/utils'
 require_relative 'delphix/web_client'
 require_relative 'delphix/web_request'

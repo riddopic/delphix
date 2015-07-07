@@ -17,9 +17,7 @@
 # limitations under the License.
 #
 
-require 'base64'
 require 'addressable/uri'
-require_relative 'utils'
 
 module Delphix
   class WebRequest

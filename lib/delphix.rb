@@ -220,11 +220,6 @@ module Delphix
   #   resource_url shorthand.
   #   @return [String] The API path to sourceconfig.
   #
-  # @!method template
-  #   A helper method to return the URL for the resource by using the
-  #   resource_url shorthand.
-  #   @return [String] The API path to template.
-  #
   # @!method timeflow
   #   A helper method to return the URL for the resource by using the
   #   resource_url shorthand.
@@ -237,7 +232,7 @@ module Delphix
   #
   [ :alert, :container, :database, :environment, :group, :host, :job,
     :login, :policy, :repository, :session, :snapshot, :source,
-    :sourceconfig, :template, :timeflow, :user
+    :sourceconfig, :timeflow, :user
   ].each do |name|
     define_singleton_method(name.to_s + '_url') do
       api_url('/resources/json/delphix/' + name.to_s)

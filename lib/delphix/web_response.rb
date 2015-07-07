@@ -47,16 +47,20 @@ module Delphix
       @code = response.code
       @headers = response.headers
       @raw_body = response
-      @body = Hashie::Mash.new(JSON.parse(@raw_body))
+      @body = @raw_body
       @cookies = response.cookies
 
       Delphix.last_response = {
         code: response.code,
         headers: response.headers,
-        body: response.body,
+        body: Hashie::Mash.new(JSON.parse(response.body)),
         cookies: response.cookies,
         description: response.description
       }
+      begin
+        @body = Hashie::Mash.new(JSON.parse(@raw_body))
+      rescue Exception
+      end
     end
   end
 end

@@ -18,7 +18,7 @@
 #
 
 module Delphix
-  class WebClient
+  class Client
     include Delphix::Utils
 
     # @param [Symnol] method
@@ -34,7 +34,7 @@ module Delphix
     #    Asychronous callback method to be invoked upon result.
     #
     def self.request(method, url, headers, body, timeout, &callback)
-      request = Delphix::WebRequest.new(method, url, headers, body)
+      request = Delphix::Request.new(method, url, headers, body)
 
       if callback
         Thread.new do
@@ -81,7 +81,7 @@ module Delphix
         response = e.response
       end
 
-      Delphix::WebResponse.new(response)
+      Delphix::Response.new(response)
     end
   end
 
@@ -159,7 +159,7 @@ module Delphix
   #
   [:get, :post, :delete].each do |method|
     define_singleton_method(method) do |url, parameters = {}, &callback|
-      WebClient.request(method.to_sym, url, @@default_headers,
+      Client.request(method.to_sym, url, @@default_headers,
         parameters.to_json, @@timeout, &callback)
     end
   end

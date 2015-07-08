@@ -66,7 +66,7 @@ module Delphix
 
       if method == :get
         if body.respond_to?(:keys) && body.respond_to?(:[]) && body.length > 0
-          url += url.include?'?' ? '&' : '?'
+          url += url.include?('?') ? '&' : '?'
           uri = Addressable::URI.new
           uri.query_values = body
           url += uri.query

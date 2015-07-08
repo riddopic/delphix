@@ -20,7 +20,7 @@
 require 'json'
 
 module Delphix
-  class WebResponse
+  class Response
     # @!attribute [r] code
     #   The HTTP response code from Delphix engine.
     #   @return [#code]

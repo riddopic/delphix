@@ -20,7 +20,7 @@
 require 'addressable/uri'
 
 module Delphix
-  class WebRequest
+  class Request
     include Delphix::Utils
 
     # @!attribute [r] method
@@ -49,17 +49,24 @@ module Delphix
       @headers[name] = value
     end
 
+    # @param [Symnol] method
+    #   A valid HTTP verb `GET`, `POST`, `PUT`, `PATCH` or `DELETE`.
+    #
+    # @param [String] url
+    #   Endpoint (address or uri) to send request.
+    #
+    # @param [String, Hash, Object] body
+    #   The request Body.
+    #
+    # @param [Proc] callback
+    #    Asychronous callback method to be invoked upon result.
+    #
     def initialize(method, url, headers = {}, body = nil)
       @method = method
 
-      if (method == :get)
-        if body.is_a?(Hash) && body.length > 0
-          if url.include? '?'
-            url += '&'
-          else
-            url += '?'
-          end
-
+      if method == :get
+        if body.respond_to?(:keys) && body.respond_to?(:[]) && body.length > 0
+          url += url.include?'?' ? '&' : '?'
           uri = Addressable::URI.new
           uri.query_values = body
           url += uri.query
@@ -68,24 +75,15 @@ module Delphix
         @body = body
       end
 
-      unless url =~ URI.regexp
-        raise 'Invalid URL: ' + url
+      if url =~ URI.regexp
+        @url = url.gsub(/\s+/, '%20')
+      else
+        raise "Invalid URL: #{url}"
       end
 
-      @url = url.gsub(/\s+/, '%20')
-
-      @headers = {
-        'Date'       => utc_httpdate,
-        'Request-ID' => request_id
-      }
-
+      @headers = { 'Date' => utc_httpdate, 'Request-ID' => request_id }
       headers.each_pair { |key, value| @headers[key.downcase] = value }
-
-      Delphix.last_request = {
-        headers: @headers,
-        method: @method,
-        url: @url
-      }
+      Delphix.last_request = { headers: @headers, method: @method, url: @url }
       begin
         Delphix.last_request[:body] = JSON.parse(@body) if body.length > 2
       rescue Exception

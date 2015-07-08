@@ -20,9 +20,9 @@
 require 'rest-client'
 require 'hashie'
 require_relative 'delphix/utils'
-require_relative 'delphix/web_client'
-require_relative 'delphix/web_request'
-require_relative 'delphix/web_response'
+require_relative 'delphix/client'
+require_relative 'delphix/request'
+require_relative 'delphix/response'
 require_relative 'delphix/version'
 
 # A library for supporting connections to the Delphix API. The module Delphix

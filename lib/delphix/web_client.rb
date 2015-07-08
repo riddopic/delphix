@@ -19,6 +19,20 @@
 
 module Delphix
   class WebClient
+    include Delphix::Utils
+
+    # @param [Symnol] method
+    #   A valid HTTP verb `:get`, `:post`, or `:delete`.
+    #
+    # @param [String] url
+    #   The address or uri to send request.
+    #
+    # @param [String, Hash, Object] body
+    #   The request Body.
+    #
+    # @param [Proc] callback
+    #    Asychronous callback method to be invoked upon result.
+    #
     def self.request(method, url, headers, body, timeout, &callback)
       request = Delphix::WebRequest.new(method, url, headers, body)
 
@@ -73,6 +87,7 @@ module Delphix
 
   # @param [String, Symbol] name
   #   A string or symbol used to identify the key portion of the HTTP headers.
+  #
   # @param [String, Symbol, Array] value
   #   A string, symbol or array containing the values of the HTTP header.
   #
@@ -99,66 +114,53 @@ module Delphix
     @@timeout = seconds
   end
 
-  # Define the #get, #post, and #delete helper methods for sending HTTP
-  # requests to the Delphix engine. You shouldn't need to use these methods
-  # directly, but they can be useful for debugging.
+  # @!method get
+  #   Retrieve data from the server where complex input is not needed. All GET
+  #   requests are guaranteed to be read-only, but not all read-only requests
+  #   are required to use GET. Simple input (strings, number, boolean values)
+  #   can be passed as query parameters.
   #
-  # The following HTTP methods are supported by the Delphix Appliance:
+  #   @param [String] url, (address or uri) to send request.
+  #   @param [String, Hash, Object] body, the request body.
+  #   @param [Proc] callback, asychronous callback method, invoked upon result.
   #
-  #    GET - Retrieve data from the server where complex input is not needed.
-  #          All GET requests are guaranteed to be read-only, but not all
-  #          read-only requests are required to use GET. Simple input
-  #          (strings, number, boolean values) can be passed as query
-  #          parameters.
-  #   POST - Issue a read/write operation, or make a read-only call that
-  #          requires complex input. The optional body of the call is
-  #          expressed as JSON.
-  #   DELETE - Delete an object on the system. For languages that don't provide
-  #          a native wrapper for DELETE, or for delete operations with
-  #          optional input, all delete operations can also be invoked as POST
-  #          to the same URL with /delete appended to it.
+  #   @return [Fixnum, #code] the response code from Delphix engine.
+  #   @return [Hash, #headers] The headers with keys as symbols.
+  #   @return [Hash, #body] body parsed response body where applicable.
+  #   @return [Hash, #raw_body] raw_body un-parsed response body.
   #
-  # Each method returns a hash that responds to #code, #headers, #body and
-  # #raw_body obtained from parsing the JSON object in the response body.
+  # @!method post
+  #   Issue a read/write operation, or make a read-only call that requires
+  #   complex input. The optional body of the call is expressed as JSON.
   #
-  # @param url [String<URL>] url the url of where to send the request
-  # @param [Hash{Symbol => String}] parameters key-value data of the HTTP
-  # API request
-  # @param [Block] block block to execute when the request returns
-  # @return [Fixnum, #code] the response code from Delphix engine
-  # @return [Hash, #headers] headers, beautified with symbols and underscores
-  # @return [Hash, #body] body parsed response body where applicable (JSON
-  # responses are parsed to Objects/Associative Arrays)
-  # @return [Hash, #raw_body] raw_body un-parsed response body
+  #   @param [String] url, (address or uri) to send request.
+  #   @param [String, Hash, Object] body, the request body.
+  #   @param [Proc] callback, asychronous callback method, invoked upon result.
   #
-  # @api semipublic
+  #   @return [Fixnum, #code] the response code from Delphix engine.
+  #   @return [Hash, #headers] The headers with keys as symbols.
+  #   @return [Hash, #body] body parsed response body where applicable.
+  #   @return [Hash, #raw_body] raw_body un-parsed response body.
+  #
+  # @!method delete
+  #   Delete an object on the system. For languages that don't provide a native
+  #   wrapper for DELETE, or for delete operations with optional input, all
+  #   delete operations can also be invoked as POST to the same URL with
+  #   /delete appended to it.
+  #
+  #   @param [String] url, (address or uri) to send request.
+  #   @param [String, Hash, Object] body, the request body.
+  #   @param [Proc] callback, asychronous callback method, invoked upon result.
+  #
+  #   @return [Fixnum, #code] the response code from Delphix engine.
+  #   @return [Hash, #headers] The headers with keys as symbols.
+  #   @return [Hash, #body] body parsed response body where applicable.
+  #   @return [Hash, #raw_body] raw_body un-parsed response body.
+  #
   [:get, :post, :delete].each do |method|
     define_singleton_method(method) do |url, parameters = {}, &callback|
       WebClient.request(method.to_sym, url, @@default_headers,
         parameters.to_json, @@timeout, &callback)
-    end
-  end
-
-  module InstanceMethods
-    private
-
-    # Returns the current api endpoint, if present.
-    #
-    # @return [nil, String] the current endpoint
-    def endpoint
-      nil
-    end
-  end
-
-  # @!classmethods
-  module ClassMethods
-    # When present, lets you specify the api for the given client.
-    #
-    # @param [String, nil] value the endpoint to use.
-    # @example Setting a string endpoint endpoint '/resources/json/delphix'
-    # @example Unsetting the string endpoint endpoint nil
-    def endpoint(value = nil)
-      define_method(:endpoint) { value }
     end
   end
 end

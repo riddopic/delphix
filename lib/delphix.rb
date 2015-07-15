@@ -52,8 +52,9 @@ module Delphix
 
   API_ENDPOINT = '/resources/json/delphix'
   HTTP_HEADERS = {
+    'Accept'       =>  'application/json; charset=UTF-8',
     'Content-Type' =>  'application/json; charset=UTF-8',
-    'User-Agent'   =>  'Delphix-Ruby-Client/' + Delphix::VERSION
+    'User-Agent'   =>  'Delphix-Ruby-Client/1.0.0'
   }
 
   # Default timeout value in seconds.
@@ -76,6 +77,9 @@ module Delphix
     #   @return [#body] parsed response body
     #   @return [#raw_body] un-parsed response body
     attr_accessor :session
+    # @!attribute [rw] api_version
+    #   @return [Hash] containing the major, minor and micro version numbers.
+    attr_accessor :api_version
     # @!attribute [rw] server
     #   @return [String] Delphix server address
     attr_accessor :server
@@ -85,32 +89,10 @@ module Delphix
     # @!attribute [rw] api_passwd
     #   @return [String] password for authentication
     attr_accessor :api_passwd
+    # @!attribute [rw] verbose
+    #   @return [Nothing] enables verbosity
+    attr_accessor :verbose
   end
-
-  # Defines custom setter that takes a string, splits on the `.` and setting
-  # the major, minor and micro versions.
-  #
-  # @param [String] name
-  #   Name of the setter
-  #
-  # @param [String] version
-  #   The version number, i.e. '1.2.3'
-  #
-  # @return [undefined]
-  #
-  def self.version_accessor(name, version = nil)
-    define_singleton_method("#{name}=") do |version|
-      instance_variable_set("@#{name}",
-        [:major, :minor, :micro].zip(version.split('.')).inject({}) {
-          |r, i| r[i[0]] = i[1]; r
-        }.merge(type: 'APIVersion')
-      )
-    end
-  end
-
-  # @!attribute [rw] api_version
-  #   @return [Hash] containing the major, minor and micro version numbers.
-  self.version_accessor :api_version
 
   # Returns the API endpoint for a given resource namespace by combining the
   # server address with the appropriate HTTP headers.
@@ -124,11 +106,6 @@ module Delphix
     'http://' + @server + resource
   end
 
-  # Initiate a session with the Delphix appliance, get our cookies for the
-  # duration of this exchange.
-  #
-  # @return [undefined]
-  #
   def self.session
     Delphix.default_header(:cookies, cookies)
     @session ||= login(@api_user, @api_passwd)

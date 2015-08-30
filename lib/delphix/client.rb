@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+require 'json'
+
 module Delphix
   class Client
     include Delphix::Utils
@@ -62,7 +64,7 @@ module Delphix
           response = RestClient::Request.execute(
             method: :post,
             url:     request.url,
-            payload: request.body,
+            payload: request.body.to_json,
             headers: request.headers,
             timeout: timeout
           )
@@ -70,7 +72,7 @@ module Delphix
           response = RestClient::Request.execute(
             method: :delete,
             url:     request.url,
-            payload: request.body,
+            payload: request.body.to_json,
             headers: request.headers,
             timeout: timeout
           )

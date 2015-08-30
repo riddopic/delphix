@@ -192,6 +192,4 @@ vendor/bundle
 vendor/cache
 
 SCRATCH.rb
-Dockerfile
-Vagrantfile.erb
 
